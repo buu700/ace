@@ -47,7 +47,7 @@ module.exports = function (context) {
         // var stats2 = fs.statSync(path.join(__dirname, '../../../../node_modules/xcode/package.json'));
 
         // We're good.
-        copyAndroidFiles();
+        //copyAndroidFiles();
         return;
     }
     catch (err) {
@@ -70,6 +70,6 @@ module.exports = function (context) {
         }));
     }).then(function() {
         // We're good.
-        copyAndroidFiles();
+        //copyAndroidFiles();
     });
 };

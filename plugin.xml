@@ -447,6 +447,8 @@
     <framework src="com.android.support:appcompat-v7:22.0.+" custom="false" />
     -->
 
+    <framework src="src/android/build/native.gradle" custom="true" type="gradleReference"/>
+
     <!-- Copies the app's native code and resources -->
     <hook type="before_compile" src="src/plugin_hooks/android_before_compile.js" />
     <!-- Also do it before run, as "cordova run android" doesn't invoke the

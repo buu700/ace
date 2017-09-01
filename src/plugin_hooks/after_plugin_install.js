@@ -30,6 +30,15 @@ function copyInitialFiles () {
         fsextra.ensureDirSync(path.join(projectFolder, "native/ios"));
         fsextra.ensureDirSync(path.join(projectFolder, "native/ios/resources"));
 
+        var androidGradleDestFile = path.join(projectFolder, 'native/android/build.gradle');
+
+        try {
+            fsextra.accessSync(androidGradleDestFile, fsextra.R_OK);
+        } catch (ex1) {
+            var androidGradleSrcFile = path.join(projectFolder, 'plugins/cordova-plugin-ace/src/android/build/build.gradle');
+            fsextra.copySync(androidGradleSrcFile, androidGradleDestFile);
+        }
+
         // Place initial iOS header file
         var iosHeaderDestFile = path.join(projectFolder, 'native/ios/CustomCode.h');
 
