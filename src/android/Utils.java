@@ -96,10 +96,10 @@ public class Utils {
 			return f.get(instance);
 		}
 		catch (NoSuchFieldException ex) {
-			throw new RuntimeException(c.getSimpleName() + " does not have a " + fieldName + " field");
+			throw new RuntimeException(c.getSimpleName() + " does not have a " + fieldName + " field", ex);
 		}
 		catch (IllegalAccessException ex) {
-			throw new RuntimeException(c.getSimpleName() + "'s " + fieldName + " field is inaccessible");
+			throw new RuntimeException(c.getSimpleName() + "'s " + fieldName + " field is inaccessible", ex);
 		}
 	}
 
@@ -110,10 +110,10 @@ public class Utils {
             return f.get(instance);
 		}
 		catch (NoSuchFieldException ex) {
-            throw new RuntimeException(c.getSimpleName() + " does not have a " + fieldName + " field");
+            throw new RuntimeException(c.getSimpleName() + " does not have a " + fieldName + " field", ex);
 		}
 		catch (IllegalAccessException ex) {
-            throw new RuntimeException(c.getSimpleName() + "'s " + fieldName + " field is inaccessible");
+            throw new RuntimeException(c.getSimpleName() + "'s " + fieldName + " field is inaccessible", ex);
 		}
 	}
 
@@ -123,10 +123,10 @@ public class Utils {
 			f.set(instance, fieldValue);
 		}
 		catch (NoSuchFieldException ex) {
-			throw new RuntimeException(c.getSimpleName() + " does not have a matching " + fieldName + " field");
+			throw new RuntimeException(c.getSimpleName() + " does not have a matching " + fieldName + " field", ex);
 		}
 		catch (IllegalAccessException ex) {
-			throw new RuntimeException(c.getSimpleName() + "'s " + fieldName + " field is inaccessible");
+			throw new RuntimeException(c.getSimpleName() + "'s " + fieldName + " field is inaccessible", ex);
 		}
 	}
 
@@ -239,13 +239,13 @@ public class Utils {
                 returnValue = m.invoke(instance);
             }
             catch (NoSuchMethodException ex) {
-                    throw new RuntimeException(c.getSimpleName() + " does not have a parameterless " + methodName + " method");
+                    throw new RuntimeException(c.getSimpleName() + " does not have a parameterless " + methodName + " method", ex);
             }
             catch (IllegalAccessException ex) {
-                throw new RuntimeException(c.getSimpleName() + "'s matching " + methodName + " method is inaccessible");
+                throw new RuntimeException(c.getSimpleName() + "'s matching " + methodName + " method is inaccessible", ex);
             }
             catch (InvocationTargetException ex) {
-                    throw new RuntimeException("Error in " + c.getSimpleName() + "." + methodName + ": " + ex.getTargetException().toString());
+                    throw new RuntimeException("Error in " + c.getSimpleName() + "." + methodName + ": " + ex.getTargetException().toString(), ex);
             }
         }
         else {
