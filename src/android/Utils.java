@@ -372,10 +372,10 @@ public class Utils {
                             return method.invoke(instance, matchingArgs);
                         }
                         catch (IllegalAccessException ex) {
-                            throw new RuntimeException(c.getSimpleName() + "'s matching " + methodName + " method is inaccessible");
+                            throw new RuntimeException(c.getSimpleName() + "'s matching " + methodName + " method is inaccessible", ex);
                         }
                         catch (InvocationTargetException ex) {
-                                throw new RuntimeException("Error in " + c.getSimpleName() + "." + methodName + ": " + ex.getTargetException().toString());
+                                throw new RuntimeException("Error in " + c.getSimpleName() + "." + methodName + ": " + ex.getTargetException().toString(), ex);
                         }
                     }
                 }
@@ -399,13 +399,13 @@ public class Utils {
 				        return constructor.newInstance(matchingArgs);
                     }
                     catch (InstantiationException ex) {
-                        throw new RuntimeException("Error instantiating " + c.getSimpleName() + ": " + ex.toString());
+                        throw new RuntimeException("Error instantiating " + c.getSimpleName() + ": " + ex.toString(), ex);
                     }
                     catch (IllegalAccessException ex) {
-                        throw new RuntimeException(c.getSimpleName() + "'s matching constructor is inaccessible");
+                        throw new RuntimeException(c.getSimpleName() + "'s matching constructor is inaccessible", ex);
                     }
                     catch (InvocationTargetException ex) {
-                        throw new RuntimeException("Error in " + c.getSimpleName() + "'s constructor: " + ex.getTargetException().toString());
+                        throw new RuntimeException("Error in " + c.getSimpleName() + "'s constructor: " + ex.getTargetException().toString(), ex);
                     }
                 }
             }
