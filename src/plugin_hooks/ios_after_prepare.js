@@ -11,30 +11,12 @@ if (!String.prototype.endsWith) {
     };
 }
 
-function copyiOSResources() {
-    var xcode = require('xcode');
+function updateiOSProject() {
     var fsextra = require('fs-extra');
+    var child_process = require("child_process");
+    var xcode = require('xcode');
 
-    var hasResources = false;
-
-	var iosAppResourcesFolder = null;
-    try {
-        iosAppResourcesFolder = path.join(__dirname, '../../../../native/ios/resources');
-        var resources = fsextra.readdirSync(iosAppResourcesFolder);
-        if (resources.length > 0) {
-            hasResources = true;
-        }
-    }
-    catch (error) {
-        // The native/ios/resources folder doesn't exist
-    }
-
-    if (!hasResources) {
-        // There are no custom resources, so there's nothing to do
-        return;
-    }
-
-	var iosFolder = path.join(__dirname, '../../../../platforms/ios');
+    var iosFolder = path.join(__dirname, '../../../../platforms/ios');
 
     // Find the path to the generated .xcodeproj folder
     var projectFolder = null;
@@ -51,33 +33,85 @@ function copyiOSResources() {
         return;
     }
 
-    // The folder with the code is next to the .xcodeproj folder, without the suffix
-    var codeFolder = projectFolder.substring(0, projectFolder.length - ".xcodeproj".length);
-    var targetResourcesFolder = path.join(codeFolder, "Resources");
-
-    // Copy any resources to the Resources folder in the project
-    fsextra.copySync(iosAppResourcesFolder, targetResourcesFolder);
+    console.info("Found xcode project at " + projectFolder);
 
     // Now edit the .pbxproj file inside the project folder
     var pbxFilePath = path.join(projectFolder, 'project.pbxproj');
     var project = new xcode.project(pbxFilePath);
 
     project.parse(function(error) {
-       if (error) {
-           console.warn("Unable to parse xcode project in order to add iOS resources:");
-           console.warn(error);
-       }
-       else {
-           // Add each custom resource
-           var resources = fsextra.readdirSync(iosAppResourcesFolder);
-           for (var i in resources) {
-               project.addResourceFile(resources[i]);
-           }
+        if (error) {
+            console.warn("Unable to parse xcode project:");
+            console.warn(error);
+        }
+        else {
+            var frameworkSearchPaths = project.getBuildProperty("FRAMEWORK_SEARCH_PATHS") || "";
 
-           // Replace the file
-           fsextra.writeFileSync(pbxFilePath, project.writeSync());
-       }
+            if (frameworkSearchPaths.indexOf("$(inherited)") < 0) {
+                frameworkSearchPaths = "\"$(inherited) " + frameworkSearchPaths.replace(/"/g, "") + "\"";
+                project.updateBuildProperty("FRAMEWORK_SEARCH_PATHS", frameworkSearchPaths);
+            }
+
+            var ldRunpathSearchPaths = project.getBuildProperty("LD_RUNPATH_SEARCH_PATHS") || "";
+
+            if (ldRunpathSearchPaths.indexOf("$(inherited)") < 0) {
+                ldRunpathSearchPaths = "\"$(inherited) " + ldRunpathSearchPaths.replace(/"/g, "") + "\"";
+                project.updateBuildProperty("LD_RUNPATH_SEARCH_PATHS", ldRunpathSearchPaths);
+            }
+
+            // Replace the file
+            fsextra.writeFileSync(pbxFilePath, project.writeSync());
+        }
     });
+
+    console.info("Xcode build settings updated.");
+
+    var nativeProjectDir = path.join(iosFolder, "../../native/ios");
+    var projectName = path.basename(projectFolder, path.extname(projectFolder));
+
+    try {
+        var iosPodFile = path.join(nativeProjectDir, 'Podfile');
+        var data = fs.readFileSync(iosPodFile).toString();
+        data = data.replace(/\${PROJECT_NAME}/g, projectName);
+        fs.writeFileSync(iosPodFile, data);
+    } catch (err) {
+        console.error("Failed to update Podfile:");
+        console.error(err);
+        throw new Error("pods_failed");
+    }
+
+    console.info("Podfile updated.");
+
+    try {
+        child_process.execSync("pod install", {
+            cwd: nativeProjectDir,
+            stdio: "inherit"
+        });
+    } catch (err) {
+        console.error("Failed to install pods.");
+        throw new Error("pods_failed");
+    }
+
+    console.info("Pods installed.");
+
+    updateiOSXcConfig(path.join(iosFolder, "pods-debug.xcconfig"),
+        "#include \"../../native/ios/Pods/Target Support Files/Pods-" + projectName + "/Pods-" + projectName + ".debug.xcconfig\"");
+    updateiOSXcConfig(path.join(iosFolder, "pods-release.xcconfig"),
+        "#include \"../../native/ios/Pods/Target Support Files/Pods-" + projectName + "/Pods-" + projectName + ".release.xcconfig\"");
+
+    console.info("Xcode build configs updated.");
+}
+
+function updateiOSXcConfig(configFile, contentToAdd) {
+    var fs = require("fs");
+
+    var data = fs.readFileSync(configFile);
+
+    if (data.indexOf(contentToAdd) < 0) {
+        data += "\n" + contentToAdd + "\n";
+
+        fs.writeFileSync(configFile, data);
+    }
 }
 
 module.exports = function (context) {
@@ -87,10 +121,15 @@ module.exports = function (context) {
         var stats2 = fs.statSync(path.join(__dirname, '../../../../node_modules/xcode/package.json'));
 
         // We're good.
-        copyiOSResources();
+        //copyiOSResources();
+        updateiOSProject();
         return;
     }
     catch (err) {
+        if (err.message === "pods_failed") {
+            return;
+        }
+
         // A dependency is not yet installed, so proceed.
     }
 
@@ -110,6 +149,7 @@ module.exports = function (context) {
         }));
     }).then(function() {
         // We're good.
-        copyiOSResources();
+        //copyiOSResources();
+        updateiOSProject();
     });
 };

@@ -426,7 +426,7 @@
     <source-file src="src/ios/WebView.mm" />
 
     <!-- For custom code: -->
-    <framework src="QuartzCore.framework" />
+    <!--<framework src="QuartzCore.framework" />-->
   </platform>
 
   <!-- android -->

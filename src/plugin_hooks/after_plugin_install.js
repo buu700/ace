@@ -20,6 +20,7 @@ var fs = require('fs');
 //
 function copyInitialFiles () {
     var fsextra = require('fs-extra');
+    var fs = require("fs");
     var projectFolder = path.join(__dirname, '../../../..');
 
     try {
@@ -40,16 +41,17 @@ function copyInitialFiles () {
         }
 
         // Place initial iOS header file
-        var iosHeaderDestFile = path.join(projectFolder, 'native/ios/CustomCode.h');
+        var iosProjectFile = path.join(projectFolder, 'native/ios/native.xcodeproj/project.pbxproj');
 
         try {
-            fsextra.accessSync(iosHeaderDestFile, fsextra.R_OK);
+            fsextra.accessSync(iosProjectFile, fsextra.R_OK);
             // The file already exists, so do nothing
         }
         catch (ex1) {
             // The file must not exist, so copy it
-            var iosHeaderSrcFile = path.join(projectFolder, 'plugins/cordova-plugin-ace/src/ios/build/CustomCode.h');
-            fsextra.copySync(iosHeaderSrcFile, iosHeaderDestFile);
+            var iosProjectSrcDir = path.join(projectFolder, 'plugins/cordova-plugin-ace/src/ios/build');
+            var iosProjectDstDir = path.join(projectFolder, 'native/ios');
+            fsextra.copySync(iosProjectSrcDir, iosProjectDstDir);
         }
     }
     catch (ex2) {
