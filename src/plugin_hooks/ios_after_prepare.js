@@ -103,8 +103,6 @@ function updateiOSProject() {
 }
 
 function updateiOSXcConfig(configFile, contentToAdd) {
-    var fs = require("fs");
-
     var data = fs.readFileSync(configFile);
 
     if (data.indexOf(contentToAdd) < 0) {
@@ -115,41 +113,5 @@ function updateiOSXcConfig(configFile, contentToAdd) {
 }
 
 module.exports = function (context) {
-    // Make sure the dependencies are installed
-    try {
-        var stats1 = fs.statSync(path.join(__dirname, '../../../../node_modules/fs-extra/package.json'));
-        var stats2 = fs.statSync(path.join(__dirname, '../../../../node_modules/xcode/package.json'));
-
-        // We're good.
-        //copyiOSResources();
-        updateiOSProject();
-        return;
-    }
-    catch (err) {
-        if (err.message === "pods_failed") {
-            return;
-        }
-
-        // A dependency is not yet installed, so proceed.
-    }
-
-    // Execute 'npm install' on dependencies mentioned in the plugin's package.json.
-    var Q = context.requireCordovaModule('q');
-    var npm = context.requireCordovaModule('npm');
-
-    var pkg = JSON.parse(fs.readFileSync(path.join(__dirname, '../../package.json'), 'utf-8'));
-
-    // Load npm
-    return Q.ninvoke(npm, 'load', {
-        loaded: false
-    }).then(function() {
-        // Invoke npm install on each key@value
-        return Q.ninvoke(npm.commands, 'install', Object.keys(pkg.dependencies).map(function(p) {
-            return p + '@' + pkg.dependencies[p];
-        }));
-    }).then(function() {
-        // We're good.
-        //copyiOSResources();
-        updateiOSProject();
-    });
+    updateiOSProject();
 };

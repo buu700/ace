@@ -14,8 +14,8 @@
     "url": "https://github.com/microsoft/ace"
   },
   "dependencies": {
-    "fs-extra": "^0.30.0",
-    "xcode": "0.8.3"
+    "fs-extra": "4.0.1",
+    "xcode": "0.9.3"
   },
   "keywords": [
     "cordova",

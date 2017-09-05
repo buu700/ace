@@ -20,7 +20,6 @@ var fs = require('fs');
 //
 function copyInitialFiles () {
     var fsextra = require('fs-extra');
-    var fs = require("fs");
     var projectFolder = path.join(__dirname, '../../../..');
 
     try {
@@ -60,42 +59,5 @@ function copyInitialFiles () {
 }
 
 module.exports = function (context) {
-    // Install the plugin's dependencies (fs-extra, used by the function above),
-    // because this doesn't happen automatically outside of Visual Studio.
-    //
-    // This is done by executing 'npm install' on dependencies mentioned in the
-    // plugin's package.json.
-    var Q = context.requireCordovaModule('q');
-    var npm = context.requireCordovaModule('npm');
-
-    var pkg = JSON.parse(fs.readFileSync(path.join(__dirname, '../../package.json'), 'utf-8'));
-
-    // First check if the dependency required by this script, fs-extra,
-    // is already installed.
-    try {
-        var stats1 = fs.statSync(path.join(__dirname, '../../../../node_modules/fs-extra/package.json'));
-        var stats2 = fs.statSync(path.join(__dirname, '../../../../node_modules/xcode/package.json'));
-        // fs-extra and xcode are already installed.
-        // Just do the initial copy then exit, because attempting to install
-        // it again can report (harmless) errors, such as when installing
-        // multiple platforms simultaneously.
-        copyInitialFiles();
-        return;
-    }
-    catch (err) {
-        // A dependency is not yet installed, so proceed.
-    }
-
-    // Load npm
-    return Q.ninvoke(npm, 'load', {
-        loaded: false
-    }).then(function() {
-        // Invoke npm install on each key@value
-        return Q.ninvoke(npm.commands, 'install', Object.keys(pkg.dependencies).map(function(p) {
-            return p + '@' + pkg.dependencies[p];
-        }));
-    }).then(function() {
-        // Now that fs-extra is installed, we can do the copying
-        copyInitialFiles();
-    });
+    copyInitialFiles();
 };
