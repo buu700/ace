@@ -25,12 +25,6 @@ AcePluginManager* _pluginManager = nil;
 + (NSObject*)create:(NSArray*)message {
     NSString* typeName = message[2];
 
-    // Remove any namespace
-    if ([typeName containsString:@"."]) {
-        NSRange range = [typeName rangeOfString:@"." options:NSBackwardsSearch];
-        typeName = [typeName substringFromIndex:range.location + 1];
-    }
-
     // Special construction of button
     if ([typeName compare:@"UIButton"] == 0) {
         // Required for getting the right visual behavior:
