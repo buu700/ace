@@ -21,12 +21,16 @@ function createApplicationClass(context) {
     var androidApplicationClassSrcPath = path.join(pluginSrcRootPath, "android/build/CustomApplication.java");
     var androidApplicationClassDstPath = path.join(pkgPath, appName + ".java");
 
-    var data = fs.readFileSync(androidApplicationClassSrcPath).toString();
+    try {
+        fs.accessSync(androidApplicationClassDstPath);
+    } catch (err) {
+        var data = fs.readFileSync(androidApplicationClassSrcPath).toString();
 
-    data = data.replace(/\${PACKAGE_NAME}/g, packageName)
-        .replace(/\${APP_NAME}/g, appName);
+        data = data.replace(/\${PACKAGE_NAME}/g, packageName)
+            .replace(/\${APP_NAME}/g, appName);
 
-    fs.writeFileSync(androidApplicationClassDstPath, data);
+        fs.writeFileSync(androidApplicationClassDstPath, data);
+    }
 
     var manifestXml = path.join(context.opts.projectRoot, "platforms/android/AndroidManifest.xml");
     var manifestData = fs.readFileSync(manifestXml).toString();
