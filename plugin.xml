@@ -455,6 +455,8 @@
          before_compile hook even when it compiles! -->
     <hook type="before_run" src="src/plugin_hooks/android_before_compile.js" />
 
+    <hook type="after_prepare" src="src/plugin_hooks/android_after_prepare.js" />
+
     <!-- Android-specific JavaScript: -->
     <js-module src="www/android/platform.js">
       <merges target="ace.platform" />
