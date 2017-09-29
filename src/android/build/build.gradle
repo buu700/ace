@@ -6,3 +6,7 @@ repositories {
 dependencies {
 
 }
+
+android {
+    // You can add android build configs here, such as dexOptions { jumboMode true }
+}
