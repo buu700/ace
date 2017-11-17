@@ -285,7 +285,7 @@ public class IncomingMessages {
 			((IFireEvents)instance).addEventHandler(eventName, handle);
 		}
 		else if (!NativeEventAttacher.attach(instance, eventName, handle)) {
-			throw new RuntimeException("Attaching handler for " + eventName + ", but it's not recognized and " + instance + " doesn't support IFireEvents.");
+			// throw new RuntimeException("Attaching handler for " + eventName + ", but it's not recognized and " + instance + " doesn't support IFireEvents.");
 		}
 	}
 
@@ -297,7 +297,7 @@ public class IncomingMessages {
 			((IFireEvents)instance).removeEventHandler(eventName);
 		}
 		else if (!NativeEventAttacher.detach(instance, eventName)) {
-			throw new RuntimeException("Removing handler for " + eventName + ", but it's not recognized and " + instance + " doesn't support IFireEvents.");
+			// throw new RuntimeException("Removing handler for " + eventName + ", but it's not recognized and " + instance + " doesn't support IFireEvents.");
 		}
 	}
 

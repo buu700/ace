@@ -226,7 +226,7 @@ AcePluginManager* _pluginManager = nil;
         NativeEventAttacher* attacher = [[NativeEventAttacher alloc] initWithInstance:instance event:eventName];
     }
     else {
-        throw [NSString stringWithFormat:@"Attaching handler for %@, but it's not recognized and %@ doesn't support IFireEvents.", eventName, [instance description]];
+        // throw [NSString stringWithFormat:@"Attaching handler for %@, but it's not recognized and %@ doesn't support IFireEvents.", eventName, [instance description]];
     }
 }
 
