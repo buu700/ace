@@ -300,8 +300,8 @@ ToNative.getAndroidId = function (name, onSuccess, onError) {
     exec(onSuccess, onError, "NativeHost", "getAndroidId", [name]);
 };
 
-ToNative.startAndroidActivity = function (name, onSuccess, onError) {
-    exec(onSuccess, onError, "NativeHost", "startAndroidActivity", [name]);
+ToNative.startAndroidActivity = function (name, params, onSuccess, onError) {
+    exec(onSuccess, onError, "NativeHost", "startAndroidActivity", [name, params]);
 };
 
 module.exports = ToNative;

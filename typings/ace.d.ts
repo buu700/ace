@@ -74,7 +74,7 @@ declare module AceModule {
 
         getId(name: string, onSuccess: Function, onError: Function): void;
 
-        startActivity(name: string, onSuccess: Function, onError: Function): void;
+        startActivity(name: string, params: any, onSuccess: Function, onError: Function): void;
 
         appWidget: AceAndroidAppWidgetStatic;
 
