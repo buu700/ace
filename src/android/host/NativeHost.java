@@ -344,21 +344,25 @@ public class NativeHost extends CordovaPlugin {
     }
 
     // Loads an Android XML file
-	void loadPlatformSpecificMarkup(String uri, CallbackContext callbackContext) {
-		try {
-            View content = readAndroidXml(uri);
-            if (content == null) {
-                throw new RuntimeException("Loading " + uri + " returned null.");
-            }
-            // Send the object as a handle
-            Handle handle = new Handle();
-            handle.register(content);
-            callbackContext.success(handle.toJSONObject());
-		}
-		catch (Exception ex) {
-            android.util.Log.d("Ace", "Caught exception: " + exceptionWithStackTrace(ex));
-            callbackContext.error(exceptionWithStackTrace(ex));
-		}
+	void loadPlatformSpecificMarkup(final String uri, final CallbackContext callbackContext) {
+		getMainActivity().runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					View content = readAndroidXml(uri);
+					if (content == null) {
+						throw new RuntimeException("Loading " + uri + " returned null.");
+					}
+					// Send the object as a handle
+					Handle handle = new Handle();
+					handle.register(content);
+					callbackContext.success(handle.toJSONObject());
+				} catch (Exception ex) {
+					android.util.Log.d("Ace", "Caught exception: " + exceptionWithStackTrace(ex));
+					callbackContext.error(exceptionWithStackTrace(ex));
+				}
+			}
+		});
 	}
 
     View readAndroidXml(String layoutName) {
