@@ -1,7 +1,14 @@
 declare module AceModule {
+    interface PlatformSpecific {
+        android?: string;
+        ios?: string;
+    }
+
     interface NativeObjectStatic {
         new(nativeTypeName: string, ...constructorArgs: any[]): NativeObject;
-        
+
+        new(platformNativeTypeNames: PlatformSpecific, ...constructorArgs: any[]): NativeObject;
+
         invoke(className: string, methodName: string, ...args: any[]): void;
 
         getField(className: string, fieldName: string, onSuccess: Function, onError: (err: Error) => void): void;
