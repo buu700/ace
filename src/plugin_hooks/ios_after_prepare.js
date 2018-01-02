@@ -47,16 +47,30 @@ function updateiOSProject() {
         else {
             var frameworkSearchPaths = project.getBuildProperty("FRAMEWORK_SEARCH_PATHS") || "";
 
-            if (frameworkSearchPaths.indexOf("$(inherited)") < 0) {
-                frameworkSearchPaths = "\"$(inherited) " + frameworkSearchPaths.replace(/"/g, "") + "\"";
-                project.updateBuildProperty("FRAMEWORK_SEARCH_PATHS", frameworkSearchPaths);
+            if (typeof frameworkSearchPaths === "string") {
+                if (frameworkSearchPaths.indexOf("$(inherited)") < 0) {
+                    frameworkSearchPaths = "\"$(inherited) " + frameworkSearchPaths.replace(/"/g, "") + "\"";
+                    project.updateBuildProperty("FRAMEWORK_SEARCH_PATHS", frameworkSearchPaths);
+                }
+            } else {
+                if (frameworkSearchPaths.indexOf("\"$(inherited)\"") < 0) {
+                    frameworkSearchPaths.unshift("\"$(inherited)\"");
+                    project.updateBuildProperty("FRAMEWORK_SEARCH_PATHS", frameworkSearchPaths);
+                }
             }
 
             var ldRunpathSearchPaths = project.getBuildProperty("LD_RUNPATH_SEARCH_PATHS") || "";
 
-            if (ldRunpathSearchPaths.indexOf("$(inherited)") < 0) {
-                ldRunpathSearchPaths = "\"$(inherited) " + ldRunpathSearchPaths.replace(/"/g, "") + "\"";
-                project.updateBuildProperty("LD_RUNPATH_SEARCH_PATHS", ldRunpathSearchPaths);
+            if (typeof ldRunpathSearchPaths === "string") {
+                if (ldRunpathSearchPaths.indexOf("$(inherited)") < 0) {
+                    ldRunpathSearchPaths = "\"$(inherited) " + ldRunpathSearchPaths.replace(/"/g, "") + "\"";
+                    project.updateBuildProperty("LD_RUNPATH_SEARCH_PATHS", ldRunpathSearchPaths);
+                }
+            } else {
+                if (ldRunpathSearchPaths.indexOf("\"$(inherited)\"") < 0) {
+                    ldRunpathSearchPaths.unshift("\"$(inherited)\"");
+                    project.updateBuildProperty("LD_RUNPATH_SEARCH_PATHS", ldRunpathSearchPaths);
+                }
             }
 
             // Replace the file
