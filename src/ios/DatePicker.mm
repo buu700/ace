@@ -7,7 +7,7 @@
 #import "OutgoingMessages.h"
 #import "Thickness.h"
 
-@implementation DatePicker
+@implementation AceDatePicker
 
 - (id)init {
     self = [super initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];

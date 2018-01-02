@@ -6,7 +6,7 @@
 #import "IFireEvents.h"
 #import "CustomActionSheet.h"
 
-@interface DatePicker : UITableViewCell <IHaveProperties, IFireEvents>
+@interface AceDatePicker : UITableViewCell <IHaveProperties, IFireEvents>
 {
     id _Header;
     UIButton* _dropDownButton;

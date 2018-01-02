@@ -4,5 +4,5 @@
 //-------------------------------------------------------------------------------------------------------
 #import "DatePicker.h"
 
-@interface TimePicker : DatePicker
+@interface TimePicker : AceDatePicker
 @end
