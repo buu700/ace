@@ -2,7 +2,7 @@ workspace '../../platforms/ios/${PROJECT_NAME}'
 
 use_frameworks!
 
-target 'MyApp' do
+target '${PROJECT_NAME}' do
     project '../../platforms/ios/${PROJECT_NAME}'
 
     # Dependencies go here
