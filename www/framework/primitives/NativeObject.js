@@ -11,6 +11,10 @@ function NativeObject(nativeTypeName /*, ...*/) {
     this._eventHandlers = {};
     this._properties = {};
 
+    if (typeof nativeTypeName === "object") {
+        nativeTypeName = ace.valueOn(nativeTypeName);
+    }
+
     if (arguments.length > 1) {
         var constructorArgs = [];
         for (var i = 1; i < arguments.length; i++) {

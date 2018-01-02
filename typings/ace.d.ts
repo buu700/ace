@@ -130,7 +130,7 @@ declare module AceModule {
 
         ios: AceiOSStatic;
 
-        valueOn(platformValues: any): any;
+        valueOn(platformValues: PlatformSpecific): any;
 
         isSupported(onSuccess: (winParam: any) => void, onError: () => void): void;
 
