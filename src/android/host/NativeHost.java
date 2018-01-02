@@ -12,11 +12,11 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.view.Menu;
 import android.view.View;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+
+import java.io.*;
 import java.lang.reflect.Field;
+import java.util.Iterator;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaActivity;
 import org.apache.cordova.CordovaInterface;
@@ -71,7 +71,7 @@ public class NativeHost extends CordovaPlugin {
         return id;
     }
 
-    public static void startActivity(String name) {
+    public static void startActivity(String name, JSONObject params) {
         Class c = null;
         try {
                 c = Class.forName(name);
@@ -79,6 +79,19 @@ public class NativeHost extends CordovaPlugin {
                 throw new RuntimeException("Unable to find a class named '" + name + "'");
         }
         android.content.Intent intent = new android.content.Intent(_activity, c);
+
+        if (params != null) {
+        	try {
+				for (Iterator<String> it = params.keys(); it.hasNext(); ) {
+					String key = it.next();
+
+					intent.putExtra(key, (Serializable) params.get(key));
+				}
+			} catch (JSONException e) {
+        		throw new RuntimeException("Unable to start activity " + name, e);
+			}
+		}
+
         _activity.startActivity(intent);
     }
 
@@ -197,7 +210,7 @@ public class NativeHost extends CordovaPlugin {
 			this.getAndroidId(args.getString(0), callbackContext);
 		}
 		else if (action.equals("startAndroidActivity")) {
-			this.startAndroidActivity(args.getString(0), callbackContext);
+			this.startAndroidActivity(args.getString(0), args.getJSONObject(1), callbackContext);
 		}
 		else if (action.equals("setPopupsCloseOnHtmlNavigation")) {
 			this.setPopupsCloseOnHtmlNavigation(args.getBoolean(0), callbackContext);
@@ -344,21 +357,26 @@ public class NativeHost extends CordovaPlugin {
     }
 
     // Loads an Android XML file
-	void loadPlatformSpecificMarkup(String uri, CallbackContext callbackContext) {
-		try {
-            View content = readAndroidXml(uri);
-            if (content == null) {
-                throw new RuntimeException("Loading " + uri + " returned null.");
-            }
-            // Send the object as a handle
-            Handle handle = new Handle();
-            handle.register(content);
-            callbackContext.success(handle.toJSONObject());
-		}
-		catch (Exception ex) {
-            android.util.Log.d("Ace", "Caught exception: " + exceptionWithStackTrace(ex));
-            callbackContext.error(exceptionWithStackTrace(ex));
-		}
+	void loadPlatformSpecificMarkup(final String uri, final CallbackContext callbackContext) {
+		getMainActivity().runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					View content = readAndroidXml(uri);
+					if (content == null) {
+						throw new RuntimeException("Loading " + uri + " returned null.");
+					}
+					// Send the object as a handle
+					Handle handle = new Handle();
+					handle.register(content);
+					callbackContext.success(handle.toJSONObject());
+				}
+				catch (Exception ex) {
+					android.util.Log.d("Ace", "Caught exception: " + exceptionWithStackTrace(ex));
+					callbackContext.error(exceptionWithStackTrace(ex));
+				}
+			}
+		});
 	}
 
     View readAndroidXml(String layoutName) {
@@ -408,8 +426,8 @@ public class NativeHost extends CordovaPlugin {
 	}
 
     // Exposed to JavaScript
-    public void startAndroidActivity(String name, CallbackContext callbackContext) {
-		NativeHost.startActivity(name);
+    public void startAndroidActivity(String name, JSONObject params, CallbackContext callbackContext) {
+		NativeHost.startActivity(name, params);
 		callbackContext.success();
     }
 

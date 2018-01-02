@@ -48,8 +48,8 @@ module.exports = {
         ace.ToNative.getAndroidId(name, onSuccess, ace.ToNative.errorHandler(onError));
     },
 
-    startActivity: function (name, onSuccess, onError) {
-        ace.ToNative.startAndroidActivity(name, onSuccess, ace.ToNative.errorHandler(onError));
+    startActivity: function (name, params, onSuccess, onError) {
+        ace.ToNative.startAndroidActivity(name, params, onSuccess, ace.ToNative.errorHandler(onError));
     },
 
     appWidget: {

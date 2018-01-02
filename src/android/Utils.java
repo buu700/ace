@@ -268,8 +268,7 @@ public class Utils {
                 if (p.isPrimitive()) {
                     matches = false;
                     break;
-                }
-                else {
+                } else {
                     // null is fine to pass for a non-primitive
                     continue;
                 }
@@ -282,68 +281,83 @@ public class Utils {
                         matches = false;
                         break;
                     }
-                }
-                else if (p == boolean.class) {
+                } else if (p == boolean.class) {
                     if (a != Boolean.class) {
                         if (looseMatching && a == String.class) {
-                            matchingArgs[i] = ((String)matchingArgs[i]).toLowerCase().trim().equals("true");
-                        }
-                        else {
+                            matchingArgs[i] = ((String) matchingArgs[i]).toLowerCase().trim().equals("true");
+                        } else {
                             matches = false;
                         }
                         break;
                     }
-                }
-                else if (p == double.class) {
+                } else if (p == double.class) {
                     if (a != Double.class) {
                         // Allow ints to be passed as doubles
                         if (a == Integer.class) {
-                            matchingArgs[i] = (double)(Integer)matchingArgs[i];
-                        }
-                        else {
+                            matchingArgs[i] = (double) (Integer) matchingArgs[i];
+                        } else {
                             matches = false;
                         }
                         break;
                     }
-                }
-                else if (p == float.class) {
+                } else if (p == float.class) {
                     if (a != Float.class) {
                         // Allow ints and doubles to be passed as floats
                         if (a == Integer.class) {
-                            matchingArgs[i] = (float)(Integer)matchingArgs[i];
-                        }
-                        else if (a == Double.class) {
-                            matchingArgs[i] = (float)(double)(Double)matchingArgs[i];
-                        }
-                        else {
+                            matchingArgs[i] = (float) (Integer) matchingArgs[i];
+                        } else if (a == Double.class) {
+                            matchingArgs[i] = (float) (double) (Double) matchingArgs[i];
+                        } else {
                             matches = false;
                         }
                         break;
                     }
-                }
-                else if (p == long.class) {
+                } else if (p == long.class) {
                     if (a != Long.class) {
                         matches = false;
                         break;
                     }
-                }
-                else if (p == short.class) {
+                } else if (p == short.class) {
                     if (a != Short.class) {
                         matches = false;
                         break;
                     }
-                }
-                else if (p == byte.class) {
+                } else if (p == byte.class) {
                     if (a != Byte.class) {
                         matches = false;
                         break;
                     }
-                }
-                else if (p == char.class) {
+                } else if (p == char.class) {
                     if (a != Character.class) {
                         matches = false;
                         break;
                     }
+                }
+            } else if (p.isEnum()) {
+                if ((a == int.class) || (a == Integer.class)) {
+                    matchingArgs[i] = p.getEnumConstants()[(Integer) matchingArgs[i]];
+                } else if (a == String.class) {
+                    Object[] enumConstants = p.getEnumConstants();
+                    matches = false;
+
+                    for (Object enumConstant : enumConstants) {
+                        if (((Enum) enumConstant).name().equals(matchingArgs[i])) {
+                            matches = true;
+                            matchingArgs[i] = enumConstant;
+                            break;
+                        }
+                    }
+
+                    if (!matches) {
+                        break;
+                    }
+                } else {
+                    matches = false;
+                    break;
+                }
+            } else if (p == String.class) {
+                if (a != String.class) {
+                    matchingArgs[i] = matchingArgs[i].toString();
                 }
             }
             else if (!p.isAssignableFrom(a)) {
