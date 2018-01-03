@@ -357,11 +357,12 @@
     NSScanner *scanner = [[NSScanner alloc] initWithString:s];
     NSInteger integer;
     if ([scanner scanInteger:&integer]) {
-        return integer;
+        if ([scanner isAtEnd]) {
+            return integer;
+        }
     }
-    else {
-        throw [NSString stringWithFormat:@"Could not parse an integer from '%@'", s];
-    }
+
+    throw [NSString stringWithFormat:@"Could not parse an integer from '%@'", s];
 }
 
 + (void) alert:(NSString*)s {
