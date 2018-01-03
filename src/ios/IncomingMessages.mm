@@ -94,7 +94,9 @@ AcePluginManager* _pluginManager = nil;
             setterName = [NSString stringWithFormat:@"set%@", [propertyName substringFromIndex:range.location + 1]];
         }
         else {
-            setterName = [NSString stringWithFormat:@"set%@", propertyName];
+            NSString* pn = [NSString stringWithFormat:@"%@%@", [[propertyName substringToIndex:1] uppercaseString],
+                [propertyName substringFromIndex:1]];
+            setterName = [NSString stringWithFormat:@"set%@", pn];
         }
 
         //TODO: Need to do more permissive parameter matching in this case since everything will be strings
