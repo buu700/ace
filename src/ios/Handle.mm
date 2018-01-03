@@ -151,7 +151,7 @@
         // Just fill with nulls up to this point.
         // This would have been caused by an earlier instantiation exception,
         // but cascading errors simply from unexpected handles are annoying.
-        while ([list count] > self->_value) {
+        while ([list count] < self->_value) {
             [list addObject:nil];
         }
         [list addObject:instance];
