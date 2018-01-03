@@ -22,6 +22,26 @@
     return oaons;
 }
 
++ (NSMutableDictionary*) _managedHandleLookup {
+    static NSMutableDictionary* map = nil;
+
+    if (map == nil) {
+        map = [[NSMutableDictionary alloc] init];
+    }
+
+    return map;
+}
+
++ (NSMutableDictionary*) _nativeHandleLookup {
+    static NSMutableDictionary* map = nil;
+
+    if (map == nil) {
+        map = [[NSMutableDictionary alloc] init];
+    }
+
+    return map;
+}
+
 // Create a handle from the native side
 - (id) init {
     self = [super init];
@@ -42,8 +62,21 @@
         return [((UIView*)obj).layer valueForKey:@"Ace.Handle"];
     }
     else {
-        throw @"Handle fromObject NYI";
-        // Need to lookup in _managedHandleLookup then _nativeHandleLookup
+        auto key = [NSNumber numberWithLongLong:(long long)obj];
+
+        auto value = (NSNumber*)[[AceHandle _managedHandleLookup] objectForKey:key];
+
+        if (value != nil) {
+            return [AceHandle createFromValue:[value intValue] fromNative:false];
+        }
+
+        value = (NSNumber*)[[AceHandle _nativeHandleLookup] objectForKey:key];
+
+        if (value != nil) {
+            return [AceHandle createFromValue:[value intValue] fromNative:true];
+        }
+
+        return nil;
     }
 }
 
@@ -89,7 +122,9 @@
             [((UIView*)instance).layer setValue:self forKey:@"Ace.Handle"];
         }
         else {
-            // TODO: _nativeHandleLookup.put(instance, this.value);
+            auto key = [NSNumber numberWithLongLong:(long long)instance];
+            auto value = [NSNumber numberWithInt:self->_value];
+            [[AceHandle _nativeHandleLookup] setObject:value forKey:key];
         }
     }
     else {
@@ -98,7 +133,9 @@
             [((UIView*)instance).layer setValue:self forKey:@"Ace.Handle"];
         }
         else {
-            // TODO: _managedHandleLookup.put(instance, this.value);
+            auto key = [NSNumber numberWithLongLong:(long long)instance];
+            auto value = [NSNumber numberWithInt:self->_value];
+            [[AceHandle _managedHandleLookup] setObject:value forKey:key];
         }
     }
 }

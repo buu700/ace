@@ -14,6 +14,9 @@
 + (NSMutableArray*) _objectsAssignedOnManagedSide;
 + (NSMutableArray*) _objectsAssignedOnNativeSide;
 
++ (NSMutableDictionary*) _managedHandleLookup;
++ (NSMutableDictionary*) _nativeHandleLookup;
+
 + (AceHandle*) createFromValue:(int)value fromNative:(BOOL)fromNative;
 
 + (AceHandle*) fromObject:(NSObject*)obj;
