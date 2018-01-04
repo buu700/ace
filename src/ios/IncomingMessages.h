@@ -24,6 +24,7 @@ enum MessageTypes {
 + (NSObject*)staticInvoke:(NSArray*)message;
 + (NSObject*)getInstance:(NSArray*)message webView:(UIWebView*)webView viewController:(UIViewController*)viewController;
 + (void)eventAdd:(NSArray*)message;
++ (void)eventRemove:(NSArray*)message;
 + (void)navigate:(UIView*)view;
 
 @end

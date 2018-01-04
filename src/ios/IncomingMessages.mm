@@ -232,6 +232,16 @@ AcePluginManager* _pluginManager = nil;
     }
 }
 
++ (void)eventRemove:(NSArray *)message {
+    NSObject* instance = [AceHandle deserialize:message[1]];
+    NSString* eventName = message[2];
+
+    if ([instance conformsToProtocol:@protocol(IFireEvents)]) {
+        NSObject<IFireEvents>* ife = (NSObject<IFireEvents>*)instance;
+        [ife removeEventHandler:eventName];
+    }
+}
+
 + (void)navigate:(UIView*)view {
     [Frame goForward:view];
 }

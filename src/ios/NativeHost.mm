@@ -115,8 +115,7 @@ BOOL _initialized;
                     [IncomingMessages eventAdd:message];
                     break;
                 case MSG_EVENTREMOVE:
-                    throw @"EventRemove NYI";
-                    //IncomingMessages.eventRemove(message);
+                    [IncomingMessages eventRemove:message];
                     break;
                 case MSG_STATICINVOKE:
                     returnValue = [IncomingMessages staticInvoke:message];
