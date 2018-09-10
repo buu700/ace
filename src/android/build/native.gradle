@@ -1,4 +1,4 @@
-ext.postBuildExtras = {
+cdvPluginPostBuildExtras.add({
     android.sourceSets.main.java.srcDirs += '../../native/android/src'
     android.sourceSets.main.resources.srcDirs += '../../native/android/src'
     android.sourceSets.main.aidl.srcDirs += '../../native/android/src'
@@ -6,6 +6,6 @@ ext.postBuildExtras = {
     android.sourceSets.main.res.srcDirs += '../../native/android/res'
     android.sourceSets.main.assets.srcDirs += '../../native/android/assets'
     android.sourceSets.main.jniLibs.srcDirs += '../../native/android/libs'
-}
+})
 
 apply from: '../../native/android/build.gradle'
