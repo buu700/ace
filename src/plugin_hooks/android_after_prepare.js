@@ -4,7 +4,7 @@ var path = require('path');
 
 function createApplicationClass(context) {
     var configXml = path.join(context.opts.projectRoot, 'config.xml');
-    var parser = context.requireCordovaModule('elementtree');
+    var parser = require('elementtree');
 
     var configData = fs.readFileSync(configXml).toString();
     var configs = parser.parse(configData);
@@ -32,7 +32,7 @@ function createApplicationClass(context) {
         fs.writeFileSync(androidApplicationClassDstPath, data);
     }
 
-    var manifestXml = path.join(context.opts.projectRoot, "platforms/android/AndroidManifest.xml");
+    var manifestXml = path.join(context.opts.projectRoot, "platforms/android/app/src/main/AndroidManifest.xml");
     var manifestData = fs.readFileSync(manifestXml).toString();
     var manifest = parser.parse(manifestData);
 
