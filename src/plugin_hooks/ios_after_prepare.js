@@ -50,7 +50,7 @@ function updateiOSProject() {
             if (typeof frameworkSearchPaths === "string") {
                 if (frameworkSearchPaths.indexOf("$(inherited)") < 0) {
                     frameworkSearchPaths = "\"$(inherited) " + frameworkSearchPaths.replace(/"/g, "") + "\"";
-                    project.updateBuildProperty("FRAMEWORK_SEARCH_PATHS", frameworkSearchPaths);
+                    project.updateBuildProperty("FRAMEWORK_SEARCH_PATHS", [frameworkSearchPaths]);
                 }
             } else {
                 if (frameworkSearchPaths.indexOf("\"$(inherited)\"") < 0) {
@@ -64,7 +64,7 @@ function updateiOSProject() {
             if (typeof ldRunpathSearchPaths === "string") {
                 if (ldRunpathSearchPaths.indexOf("$(inherited)") < 0) {
                     ldRunpathSearchPaths = "\"$(inherited) " + ldRunpathSearchPaths.replace(/"/g, "") + "\"";
-                    project.updateBuildProperty("LD_RUNPATH_SEARCH_PATHS", ldRunpathSearchPaths);
+                    project.updateBuildProperty("LD_RUNPATH_SEARCH_PATHS", [ldRunpathSearchPaths]);
                 }
             } else {
                 if (ldRunpathSearchPaths.indexOf("\"$(inherited)\"") < 0) {
