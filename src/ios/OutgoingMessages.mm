@@ -47,7 +47,7 @@ SEL _selector;
 }
 
 + (void) send:(NSArray*)data {
-    objc_msgSend(_callback, _selector, data);
+    ((id (*)(id, SEL, NSArray*))objc_msgSend)(_callback, _selector, data);
 }
 
 @end
