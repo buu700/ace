@@ -80,7 +80,7 @@ function updateiOSProject() {
 
     console.info("Xcode build settings updated.");
 
-    var nativeProjectDir = path.join(iosFolder, "../../native/ios");
+    var nativeProjectDir = path.join(iosFolder, "../../platforms/ios");
     var projectName = path.basename(projectFolder, path.extname(projectFolder));
 
     try {
@@ -109,9 +109,9 @@ function updateiOSProject() {
     console.info("Pods installed.");
 
     updateiOSXcConfig(path.join(iosFolder, "pods-debug.xcconfig"),
-        "#include \"../../native/ios/Pods/Target Support Files/Pods-" + projectName + "/Pods-" + projectName + ".debug.xcconfig\"");
+        "#include \"../../platforms/ios/Pods/Target Support Files/Pods-" + projectName + "/Pods-" + projectName + ".debug.xcconfig\"");
     updateiOSXcConfig(path.join(iosFolder, "pods-release.xcconfig"),
-        "#include \"../../native/ios/Pods/Target Support Files/Pods-" + projectName + "/Pods-" + projectName + ".release.xcconfig\"");
+        "#include \"../../platforms/ios/Pods/Target Support Files/Pods-" + projectName + "/Pods-" + projectName + ".release.xcconfig\"");
 
     console.info("Xcode build configs updated.");
 }
