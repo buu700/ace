@@ -37,7 +37,7 @@ BOOL _initialized;
 */
 
 // Called when the URL of the webview changes
-- (BOOL)shouldOverrideLoadWithRequest:(NSURLRequest*)request navigationType:(UIWebViewNavigationType)navigationType {
+- (BOOL)shouldOverrideLoadWithRequest:(NSURLRequest*)request navigationType:(WKNavigationType)navigationType {
     if ([[request.URL absoluteString] hasPrefix:@"native://"] || [[request.URL absoluteString] hasPrefix:@"ios://"]) {
         [OutgoingMessages raiseEvent:@"ace.navigate" handle:nil eventData:[request.URL absoluteString]];
         return true;

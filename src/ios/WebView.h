@@ -2,14 +2,14 @@
 // Copyright (C) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
 //-------------------------------------------------------------------------------------------------------
+#import <WebKit/WebKit.h>
 #import "IHaveProperties.h"
 
-// Clashes with WKWebView, which somehow looks like WebView to reflection
-@interface AceWebView : UIWebView <IHaveProperties, UIWebViewDelegate>
+@interface AceWebView : WKWebView <IHaveProperties, WKNavigationDelegate>
 
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;
-- (void)webViewDidStartLoad:(UIWebView *)webView;
-- (void)webViewDidFinishLoad:(UIWebView *)webView;
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error;
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler;
+- (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(WKNavigation *)navigation;
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation;
+- (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error;
 
 @end

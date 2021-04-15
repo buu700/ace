@@ -49,7 +49,7 @@ AcePluginManager* _pluginManager = nil;
 }
 
 // Get an existing well-known object instance
-+ (NSObject*)getInstance:(NSArray*)message webView:(UIWebView*)webView viewController:(UIViewController*)viewController {
++ (NSObject*)getInstance:(NSArray*)message webView:(WKWebView*)webView viewController:(UIViewController*)viewController {
     NSString* typeName = message[2];
 
     if ([typeName compare:@"HostPage"] == 0) {

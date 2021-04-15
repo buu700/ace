@@ -2,6 +2,8 @@
 // Copyright (C) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
 //-------------------------------------------------------------------------------------------------------
+#import <WebKit/WebKit.h>
+
 enum MessageTypes {
     MSG_CREATE = 0,
     MSG_SET = 1,
@@ -22,7 +24,7 @@ enum MessageTypes {
 + (void)set:(NSArray*)message;
 + (NSObject*)invoke:(NSArray*)message;
 + (NSObject*)staticInvoke:(NSArray*)message;
-+ (NSObject*)getInstance:(NSArray*)message webView:(UIWebView*)webView viewController:(UIViewController*)viewController;
++ (NSObject*)getInstance:(NSArray*)message webView:(WKWebView*)webView viewController:(UIViewController*)viewController;
 + (void)eventAdd:(NSArray*)message;
 + (void)eventRemove:(NSArray*)message;
 + (void)navigate:(UIView*)view;

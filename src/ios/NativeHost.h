@@ -4,6 +4,7 @@
 //-------------------------------------------------------------------------------------------------------
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <WebKit/WebKit.h>
 #import <Cordova/CDVPlugin.h>
 
 // Bring in any custom code included by the app
