@@ -45,7 +45,8 @@
 }
 
 + (NSObject*) invokeStaticMethod:(NSString*)typeName methodName:(NSString*)methodName args:(NSArray*)args {
-    return [Utils invokeMethod:NSClassFromString(typeName) methodName:methodName args:args];
+    NSObject* target = (NSObject*)NSClassFromString(typeName);
+    return [Utils invokeMethod:target methodName:methodName args:args];
 }
 
 + (NSObject*) invokeInstanceMethod:(NSObject*)instance methodName:(NSString*)methodName args:(NSArray*)args {
